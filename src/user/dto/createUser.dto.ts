@@ -7,5 +7,6 @@ export class CreateUserDto{
 	readonly age;
 	readonly education;
 	readonly city;
-	readonly avatar;
+	readonly password;
+	readonly email
 }

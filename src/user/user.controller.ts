@@ -3,16 +3,17 @@ import {UserService} from "./user.service";
 import {CreateUserDto} from "./dto/createUser.dto";
 import mongoose from "mongoose";
 import {CreatePostDto} from "./dto/createPost.dto";
+import {JwtService} from "@nestjs/jwt";
 
 @Controller('/user')
 export class UserController {
 	constructor(private userService: UserService) {
 	}
 
-	@Post()
-	create(@Body() dto: CreateUserDto) {
-		return this.userService.create(dto)
-	}
+	// @Post()
+	// create(@Body() dto: CreateUserDto) {
+	// 	return this.userService.create(dto)
+	// }
 
 	@Get(':id')
 	getUser(@Param('id') id: mongoose.Schema.Types.ObjectId) {
