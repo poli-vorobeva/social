@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import {FileModule} from "./file/file.module";
 import * as path from "path";
 import {ServeStaticModule} from "@nestjs/serve-static";
+import { PeopleModule } from './people/people.module';
 
 console.log(path.resolve(__dirname,'..','static'))
 
@@ -14,7 +15,7 @@ imports:[
 		rootPath:path.resolve(__dirname,'static')
 	}),
 	MongooseModule.forRoot('mongodb+srv://admin:admin@cluster0.hr4nj2z.mongodb.net/musicApp?retryWrites=true&w=majority')
-	,UserModule, AuthModule,FileModule
+	,UserModule, AuthModule,FileModule, PeopleModule
 	]
 })
 

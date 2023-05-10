@@ -11,42 +11,46 @@ export class AuthService {
 							private jwtService: JwtService) {
 	}
 
-	async login(userDto: CreateUserDto) {
-		const user = await this.validateUser(userDto)
-		//return this.generateToken(user)
-		console.log(user, 'UUUUUUU')
-		return user
+	async login(loginData: { email: string, password: string }) {
+		try{
+			const user = await this.validateUser(loginData)
+			return user
+		}catch (e) {
+			return e.message
+		}
 	}
 
-	async registration(userDto: CreateUserDto,file): Promise<{ token: string }> {
+	async registration(userDto: CreateUserDto, file): Promise<User> {
 		const candidate = await this.userService.getUserByEmail(userDto.email)
 		if (candidate) {
 			throw new HttpException('Пользователь с таким email уже существует', HttpStatus.BAD_REQUEST)
 		}
 		const hashPassword = await bcrypt.hash(userDto.password, 5)
-		const user = await this.userService.create({...userDto, password: hashPassword},file.avatar[0])
-		return this.generateToken(user)
+		const user = await this.userService.create({...userDto, password: hashPassword}, file.avatar[0])
+		return user
 	}
 
-	async encodeToken(token: string) {
-		const userEncode = this.jwtService.verify(token||'')
-		const usId = await this.userService.getUserByEmail(userEncode.email)
-console.log(usId._id,'usId')
-		const userData=await this.userService.getUser(usId._id)
-		console.log(userData,'usD')
-		return userData
-	}
+	// async encodeToken(token: string) {
+	// 	const userEncode = this.jwtService.verify(token || '')
+	// 	const usId = await this.userService.getUserByEmail(userEncode.email)
+	// 	console.log(usId._id, 'usId')
+	// 	const userData = await this.userService.getUser(usId._id)
+	// 	console.log(userData, 'usD')
+	// 	return userData
+	// }
 
-	private async generateToken(user: User) {
-		return {
-			token: this.jwtService.sign({email: user.email, password: user.password})
-		}
-	}
+	// private async generateToken(user: User) {
+	// 	return {
+	// 		token: this.jwtService.sign({email: user.email, password: user.password})
+	// 	}
+	// }
 
-	private async validateUser(userDto: CreateUserDto) {
-		const userId = await this.userService.getUserByEmail(userDto.email)
+	private async validateUser(loginData: { email: string, password: string }) {
+		const userId = await this.userService.getUserByEmail(loginData.email)
+		if (!userId) throw new UnauthorizedException({message: 'Некорректный емейл или пароль'})
 		const user = await this.userService.getUser(userId._id)
-		const passwordEquals = await bcrypt.compare(userDto.password, user.password)
+		const passwordEquals = await bcrypt.compare(loginData.password, user.password)
+		console.log("EQ?", passwordEquals)
 		if (user && passwordEquals) {
 			return user
 		}

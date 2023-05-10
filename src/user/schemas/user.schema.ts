@@ -20,6 +20,8 @@ export class User{
 	avatar:string;
 	@Prop({type:[{type:mongoose.Schema.Types.ObjectId,ref:'Friend'}]})
 	friends:Friend[];
+	@Prop({type:[{type:mongoose.Schema.Types.ObjectId,ref:'Post'}]})
+	posts:Post[];
 	@Prop()
 	email:string;
 	@Prop()

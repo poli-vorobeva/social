@@ -9,14 +9,15 @@ export class AuthController {
 	constructor(private authService: AuthService) {
 	}
 
-	@Post('/isAuth')
-	encodeToken(@Body() token: { token: string }) {
-		return this.authService.encodeToken(token.token)
-	}
+	// @Post('/isAuth')
+	// encodeToken(@Body() token: { token: string }) {
+	// 	return this.authService.encodeToken(token.token)
+	// }
 
 	@Post('/login')
-	login(@Body() userDto: CreateUserDto) {
-		return this.authService.login(userDto)
+	login(@Body() loginData: { email: string, password: string }) {
+		const login = this.authService.login(loginData)
+		return login
 	}
 
 	@Post('/registration')
@@ -24,7 +25,7 @@ export class AuthController {
 		{name: 'avatar', maxCount: 1}
 	]))
 	registration(@UploadedFiles() files, @Body() userDto: CreateUserDto) {
-		const fromReg = this.authService.registration(userDto,files)
+		const fromReg = this.authService.registration(userDto, files)
 		return fromReg
 	}
 }
