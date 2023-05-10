@@ -51,20 +51,23 @@ export class UserService {
 		return post
 	}
 
+	async deleteFriend(userId: mongoose.Schema.Types.ObjectId, friendId: mongoose.Schema.Types.ObjectId) {
+		const user = await this.userModel.findById(userId);
+		user.friends=user.friends.filter(fr => !(fr.friendId==friendId))
+		await user.save();
+		console.log(user, '@@')
+		return user
+	}
+
 	async addFriend(id: mongoose.Schema.Types.ObjectId, friendId: mongoose.Schema.Types.ObjectId): Promise<User> {
 		const friend = await this.userModel.findById(friendId);
 		const user = await this.userModel.findById(id);
 		// @ts-ignore
-		user.friends.push({name:friend.name,friendId:friend._id,avatar:friend.avatar})
-		await user.save();
-		return user
-	}
-
-	async deleteFriend(id: mongoose.Schema.Types.ObjectId, friendId: mongoose.Schema.Types.ObjectId): Promise<User> {
-		const user = await this.userModel.findById(id);
-		// @ts-ignore
-		user.friends = user.friends.filter(el => el !== friendId)
-		await user.save();
+		if (!user.friends.find(fr => fr.name == friend.name)) {
+			user.friends.push({name: friend.name, friendId: friend._id, avatar: friend.avatar})
+			await user.save();
+			return user
+		}
 		return user
 	}
 

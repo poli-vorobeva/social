@@ -25,7 +25,10 @@ export class UserController {
 
 		return this.userService.addPost(dto,files)
 	}
-
+@Get('/feed')
+getFeed(){
+	return this.userService.getFeed()
+}
 	@Post('/friend/:id')
 	addFriend(@Param('id') id: mongoose.Schema.Types.ObjectId,
 						@Body() friendId: mongoose.Schema.Types.ObjectId) {

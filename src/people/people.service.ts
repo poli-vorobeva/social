@@ -9,8 +9,11 @@ import {UserService} from "../user/user.service";
 export class PeopleService {
 	constructor(private userService: UserService) {
 	}
+	async deleteFriend(friendId, userId){
+		const user=await this.userService.deleteFriend(userId,friendId)
+		return user
+}
 	async addFriend(id,friendId){
-		console.log("1111111")
 		const user=await this.userService.addFriend(id,friendId)
 		return user
 	}

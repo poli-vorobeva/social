@@ -1,6 +1,5 @@
 import {Body, Controller, Get, Param, Post} from '@nestjs/common';
 import {PeopleService} from "./people.service";
-import mongoose from "mongoose";
 
 @Controller('/people')
 export class PeopleController {
@@ -16,5 +15,11 @@ export class PeopleController {
 	addFriend(@Param('id') id: string,
 						@Body() friendId: { friendId: string }) {
 		return this.peopleService.addFriend(id, friendId.friendId)
+	}
+
+	@Post('/:id/:friendId')
+	deleteFriend(@Param('id') id: string, @Param('friendId') friendId: string) {
+		console.log("####", id, friendId)
+		return this.peopleService.deleteFriend(friendId, id)
 	}
 }
