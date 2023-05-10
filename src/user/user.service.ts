@@ -24,6 +24,11 @@ export class UserService {
 		return user
 	}
 
+	async getPeople() {
+		const people = await this.userModel.find()
+		return people
+	}
+
 	async getUser(id: mongoose.Schema.Types.ObjectId): Promise<User> {
 		const user = await this.userModel.findById(id)
 		return user
@@ -37,7 +42,8 @@ export class UserService {
 			date: dto.date,
 			userId: user._id,
 			userName: user.name,
-			picture: imagePath
+			picture: imagePath,
+			likes: '0'
 		})
 		// @ts-ignore
 		!user.posts ? user.posts = [post] : user.posts.unshift(post)
@@ -46,9 +52,10 @@ export class UserService {
 	}
 
 	async addFriend(id: mongoose.Schema.Types.ObjectId, friendId: mongoose.Schema.Types.ObjectId): Promise<User> {
+		const friend = await this.userModel.findById(friendId);
 		const user = await this.userModel.findById(id);
 		// @ts-ignore
-		user.friends.push(friendId)
+		user.friends.push({name:friend.name,friendId:friend._id,avatar:friend.avatar})
 		await user.save();
 		return user
 	}

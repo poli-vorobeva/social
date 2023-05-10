@@ -1,5 +1,8 @@
 import {Prop, Schema, SchemaFactory} from "@nestjs/mongoose";
 import {Post} from "./post.schema";
+import {Document} from "mongoose";
+import mongoose from "mongoose";
+import {User} from "./user.schema";
 
 export type FriendDocument = Friend & Document
 
@@ -8,14 +11,8 @@ export class Friend{
 	@Prop()
 	name:string;
 	@Prop()
-	age:number;
-	@Prop()
-	education:string;
-	@Prop()
-	city:string;
-	@Prop()
 	avatar:string;
-	@Prop()
-	posts:Post[]
+	@Prop({type: mongoose.Schema.Types.ObjectId, ref: 'User'})
+	friendId: User;
 }
 export const FriendSchema = SchemaFactory.createForClass(Friend);

@@ -18,8 +18,8 @@ export class User{
 	city:string;
 	@Prop()
 	avatar:string;
-	@Prop({type:[{type:mongoose.Schema.Types.ObjectId,ref:'Friend'}]})
-	friends:Friend[];
+	@Prop()
+	friends: { name: string, friendId: mongoose.Schema.Types.ObjectId, avatar: string }[];
 	@Prop({type:[{type:mongoose.Schema.Types.ObjectId,ref:'Post'}]})
 	posts:Post[];
 	@Prop()

@@ -17,6 +17,8 @@ export class Post {
 	userName:string
 	@Prop()
 	picture:string
+	@Prop()
+	likes:string
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post)
